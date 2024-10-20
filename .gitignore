@@ -1,0 +1,6 @@
+# Build dir and objects
+build/*
+
+# VS Code stuff
+.vscode
+
