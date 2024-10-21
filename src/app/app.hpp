@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../ui/window.hpp"
+#include "../shared/event.hpp"
+#include "../shared/datastructure.hpp"
 
 class App
 {
@@ -9,5 +11,10 @@ public:
     void run();
 
 private:
+    void handleEvents();
+    bool running = true;
+
+
+    EventQueue queue;
     NotepadWindow* window;
 };

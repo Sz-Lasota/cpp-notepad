@@ -7,13 +7,16 @@
 #include <X11/Xlib.h>
 #include <GL/glx.h>
 
+#include "../shared/event.hpp"
+#include "../shared/datastructure.hpp"
+
 class NotepadWindow
 {
 public:
     NotepadWindow(int width, int height);
     ~NotepadWindow();
     void debug();
-    void update(bool *running);
+    void update(EventQueue *queue);
 
 private:
     int width;

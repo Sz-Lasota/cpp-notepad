@@ -25,7 +25,7 @@ NotepadWindow::~NotepadWindow()
     XDestroyWindow(display, window);
 }
 
-void NotepadWindow::update(bool *running)
+void NotepadWindow::update(EventQueue *queue)
 {
     XEvent event;
     XNextEvent(display, &event);
@@ -34,7 +34,10 @@ void NotepadWindow::update(bool *running)
     {
         if (event.xclient.data.l[0] == deleteAtom)
         {
-            (*running) = false;
+            std::cout << "hello" << std::endl;
+            queue->offer(
+                new NPAppExitEvent()
+            );
         }
     }
 
