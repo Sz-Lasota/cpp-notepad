@@ -21,7 +21,6 @@ NotepadWindow::NotepadWindow(int width, int height) : width(width), height(heigh
 
 NotepadWindow::~NotepadWindow()
 {
-    std::cout << "Destroing" << std::endl;
     XDestroyWindow(display, window);
 }
 
@@ -34,10 +33,7 @@ void NotepadWindow::update(EventQueue *queue)
     {
         if (event.xclient.data.l[0] == deleteAtom)
         {
-            std::cout << "hello" << std::endl;
-            queue->offer(
-                new NPAppExitEvent()
-            );
+            queue->offer(new NPAppExitEvent());
         }
     }
 
