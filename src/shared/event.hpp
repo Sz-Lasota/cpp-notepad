@@ -44,11 +44,10 @@ public:
 class NPKeyPressedEvent : public NPEvent
 {
 public:
-    NPKeyPressedEvent(char *keyChar) : keyChar(keyChar) {};
     static NPEventType getStaticType() { return NPEventType::KeyPressed; }
     virtual NPEventType getEventType() const override { return getStaticType(); }
     virtual int getCategoryFlag() const override { return KeyboardEvent; }
-    char *keyChar;
+    char keyChar[32];
 };
 
 class NPEventDispatcher

@@ -29,7 +29,6 @@ void App::handleEvents()
         }
         event = queue.poll();
     }
-    running = true;
 }
 
 void App::run()

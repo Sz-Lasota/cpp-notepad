@@ -1,4 +1,5 @@
 #include "window.hpp"
+#include <string.h>
 
 NotepadWindow::NotepadWindow(int width, int height) : width(width), height(height)
 {
@@ -48,12 +49,16 @@ void NotepadWindow::update(EventQueue *queue)
     if (event.type == KeyPress)
     {        
         KeySym keysym;
-        char *utf8_str;
+        char utf8_str[32];
         Status status;
         int len_utf8_str = Xutf8LookupString(
             xic, &event.xkey, utf8_str, sizeof(utf8_str) - 1, &keysym, &status);
 
-        queue->offer(new NPKeyPressedEvent(utf8_str));
+        NPKeyPressedEvent* keyEvent = new NPKeyPressedEvent();
+        strncpy(keyEvent->keyChar, utf8_str, sizeof(keyEvent->keyChar) - 1);
+        keyEvent->keyChar[sizeof(keyEvent->keyChar) - 1] = '\0';
+
+        queue->offer(keyEvent);
     }
 
     if (event.type == Expose)
