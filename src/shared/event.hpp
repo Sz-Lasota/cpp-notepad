@@ -2,6 +2,7 @@
 
 #include <string>
 #include <functional>
+#include <iostream>
 
 enum class NPEventType
 {
@@ -35,9 +36,19 @@ private:
 class NPAppExitEvent : public NPEvent
 {
 public:
+    static NPEventType getStaticType() { return NPEventType::AppExit; }
+    virtual NPEventType getEventType() const override { return getStaticType(); }
+    virtual int getCategoryFlag() const override { return KeyboardEvent; }
+};
+
+class NPKeyPressedEvent : public NPEvent
+{
+public:
+    NPKeyPressedEvent(char *keyChar) : keyChar(keyChar) {};
     static NPEventType getStaticType() { return NPEventType::KeyPressed; }
     virtual NPEventType getEventType() const override { return getStaticType(); }
     virtual int getCategoryFlag() const override { return KeyboardEvent; }
+    char *keyChar;
 };
 
 class NPEventDispatcher
@@ -46,14 +57,14 @@ class NPEventDispatcher
     using NPEventHandler = std::function<bool(T &)>;
 
 public:
-    NPEventDispatcher(NPEvent &event): event(event) {}
+    NPEventDispatcher(NPEvent &event) : event(event) {}
 
     template <typename T>
     bool handle(NPEventHandler<T> handler)
     {
         if (event.getEventType() == T::getStaticType())
         {
-            handler(*(T*)&event);
+            handler(*(T *)&event);
             return true;
         }
 
@@ -61,5 +72,5 @@ public:
     }
 
 private:
-    NPEvent& event;
+    NPEvent &event;
 };

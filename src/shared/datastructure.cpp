@@ -16,9 +16,9 @@ unsigned int utf8charlen(unsigned int c)
     return 0;
 }
 
-signed int find_byte_index_by_char_index(const char *str, signed int idx)
+int find_byte_index_by_char_index(const char *str, int idx)
 {
-    signed int byte_index = 0, i = 0;
+    int byte_index = 0, i = 0;
     while (str[byte_index] != '\0' && i < idx)
     {
         byte_index += utf8charlen(str[byte_index]);

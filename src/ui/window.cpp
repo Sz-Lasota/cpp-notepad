@@ -3,10 +3,18 @@
 NotepadWindow::NotepadWindow(int width, int height) : width(width), height(height)
 {
     display = XOpenDisplay(NULL);
+
+    xim = XOpenIM(display, NULL, NULL, NULL);
+    XSetLocaleModifiers("");
+
     window = XCreateSimpleWindow(display, DefaultRootWindow(display), 0,
                                  0, width, height, 0, 0, 0);
+
     XMapWindow(display, window);
     XSelectInput(display, window, ExposureMask | ButtonPressMask | KeyPressMask);
+
+    xic = XCreateIC(xim, XNInputStyle, XIMPreeditNothing | XIMStatusNothing,
+                    XNClientWindow, window, NULL);
 
     deleteAtom = XInternAtom(display, "WM_DELETE_WINDOW", True);
     XSetWMProtocols(display, window, &deleteAtom, 1);
@@ -37,6 +45,17 @@ void NotepadWindow::update(EventQueue *queue)
         }
     }
 
+    if (event.type == KeyPress)
+    {        
+        KeySym keysym;
+        char *utf8_str;
+        Status status;
+        int len_utf8_str = Xutf8LookupString(
+            xic, &event.xkey, utf8_str, sizeof(utf8_str) - 1, &keysym, &status);
+
+        queue->offer(new NPKeyPressedEvent(utf8_str));
+    }
+
     if (event.type == Expose)
     {
         width = event.xexpose.width;
@@ -49,7 +68,7 @@ void NotepadWindow::render()
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glClearColor(0.1f, 0.5f, 0.2f, 0.9f);
+    glClearColor(0.23f, 0.23f, 0.23f, 1.0f);
 
     glXSwapBuffers(display, window);
 }

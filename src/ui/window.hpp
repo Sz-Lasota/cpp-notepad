@@ -23,6 +23,8 @@ private:
     int height;
 
     XEvent event;
+    XIM xim;
+    XIC xic;
 
     Atom deleteAtom;
 

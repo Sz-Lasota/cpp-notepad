@@ -17,10 +17,19 @@ void App::handleEvents()
         if (event->getEventType() == NPAppExitEvent::getStaticType())
         {
             running = false;
+            return;
+        }
+
+        if (event->getEventType() == NPKeyPressedEvent::getStaticType())
+        {
+            NPKeyPressedEvent* test = dynamic_cast<NPKeyPressedEvent*>(event);
+
+            std::cout << test->keyChar << std::endl;
+            delete test;
         }
         event = queue.poll();
     }
-
+    running = true;
 }
 
 void App::run()
